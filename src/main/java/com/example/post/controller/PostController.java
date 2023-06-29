@@ -49,4 +49,4 @@ public class PostController {
     public DeletePostDto deletePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto){
         return postService.deletePost(id, postRequestDto);
     }
-}
+}//
