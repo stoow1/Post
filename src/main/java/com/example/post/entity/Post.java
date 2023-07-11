@@ -21,7 +21,7 @@ public class Post extends TimeStamped {
     private String pwd;
 
 
-    public Post(PostRequestDto postRequestDto) {
+    public Post(PostRequestDto postRequestDto, String username) {
         this.name = postRequestDto.getName();
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();

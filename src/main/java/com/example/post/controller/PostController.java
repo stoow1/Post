@@ -1,7 +1,6 @@
 package com.example.post.controller;
 
 
-import com.example.post.dto.DeletePostDto;
 import com.example.post.dto.PostRequestDto;
 import com.example.post.dto.PostResponseDto;
 import com.example.post.service.PostService;
@@ -16,37 +15,38 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
 
-    private  final PostService postService;
+    private final PostService postService;
 
     @Transactional
     @PostMapping("/post")
-    public PostResponseDto savePost(@RequestBody PostRequestDto postRequestDto){
-        return postService.savePost(postRequestDto);
+    public PostResponseDto savePost(@RequestHeader("Authorization") String token, @RequestBody PostRequestDto postRequestDto) {
+        return postService.savePost(token, postRequestDto);
     }
 
     @Transactional
     @GetMapping("/posts")
-    public List<PostResponseDto> getPosts(){
+    public List<PostResponseDto> getPosts() {
 
         return postService.getPosts();
     }
 
     @Transactional
     @GetMapping("/post/{id}")
-    public PostResponseDto getPost(@PathVariable Long id){
+    public PostResponseDto getPost(@PathVariable Long id) {
 
         return postService.getPost(id);
     }
 
     @Transactional
     @PutMapping("/post/{id}")
-    public PostResponseDto putPost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto){
-        return postService.putPost(id, postRequestDto);
+    public PostResponseDto putPost(@RequestHeader("Authorization") String token, @PathVariable Long id, @RequestBody PostRequestDto postRequestDto) {
+        return postService.putPost(token, id, postRequestDto);
     }
 
     @Transactional
     @DeleteMapping("/post/{id}")
-    public DeletePostDto deletePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto){
-        return postService.deletePost(id, postRequestDto);
+    public PostResponseDto deletePost(@RequestHeader("Authorization") String token, @PathVariable Long id, @RequestBody PostRequestDto postRequestDto) {
+        return postService.DeletePost(token, id, postRequestDto);
     }
-}////
+
+}
