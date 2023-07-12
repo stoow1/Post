@@ -12,10 +12,13 @@ import lombok.Setter;
 public class SignupRequestDto {
 
     @NotBlank(message = "아이디를 입력해주세요")
-    @Pattern(regexp = "[a-z0-9]{4,10}")
+    @Pattern(regexp = "^[a-z0-9]{4,10}$")
     private String username;
 
     @NotBlank(message = "비밀번호를 입력해주세요")
-    @Pattern(regexp = "[a-zA-Z0-9]{8,15}")
+    @Pattern(regexp = "^[A-Za-z0-9!@#$%^&*\\])(?=.]{8,15}$")
     private String password;
+
+    private boolean admin = false;      // 일반사용자(default)=false, 관리자(=true)
+    private String adminToken = "";     // admin=true로 반환했을 경우 adminToken값 확인 일치하면 Admin 처리
 }

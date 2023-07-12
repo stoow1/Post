@@ -4,6 +4,7 @@ import com.example.post.dto.LoginRequestDto;
 import com.example.post.dto.ResponseDto;
 import com.example.post.dto.SignupRequestDto;
 import com.example.post.entity.User;
+import com.example.post.entity.UserRoleEnum;
 import com.example.post.jwt.JwtUtil;
 import com.example.post.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
+    private static final String ADMIN_TOKEN = "abc123";  // 비교 대상 ADMIN_TOKEN 값
+
 
     public ResponseDto signup(SignupRequestDto signupRequestDto) {
         String username = signupRequestDto.getUsername();
@@ -33,7 +36,15 @@ public class UserService {
             throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
         }
 
-        User user = new User(username, password);
+        UserRoleEnum role = UserRoleEnum.USER;                                          // 사용자 권한 확인
+        if (signupRequestDto.isAdmin()) {
+            if (!signupRequestDto.getAdminToken().equals(ADMIN_TOKEN)) {
+                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+            }
+            role = UserRoleEnum.ADMIN;
+        }
+
+        User user = new User(username, password, role);
         userRepository.save(user);
         return new ResponseDto("success", HttpStatus.OK.value());
     }
@@ -51,7 +62,7 @@ public class UserService {
         }
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername()));
+        headers.add(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
         return new ResponseDto("success", HttpStatus.OK.value());
     }
 }

@@ -18,10 +18,15 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)        // User Type(user, admin) Enum 연결
+    private UserRoleEnum role;
 
-    public User(String username, String password) {
-        this.username = username;           // 사용자 아이디
-        this.password = password;           // 사용자 패스워드
+
+    public User(String username, String password, UserRoleEnum role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }
 
 }
